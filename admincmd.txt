@@ -47,7 +47,7 @@ Mod Commands:
 /modpm
 
 duplicate commands:
-/hello
+/hello    
 /escortme -> /escortmyass
-/warnme
-/afk
+/warnme   -> /notifyme
+/afk      -> /away
