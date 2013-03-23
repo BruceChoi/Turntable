@@ -1,0 +1,53 @@
+Mod Commands:
+---denotes initial commands to turn off
+/botstatus  --------
+/queueOff  ----------
+/ban @
+/unban @
+/boot
+/move
+/playminus @
+/snagevery
+/autosnag
+/skipon    ----------
+/playLimitOn
+/playLimitOff
+/skipoff
+/stalk @
+/lengthLimit --------
+/setTheme
+/noTheme
+/stage @
+/randomSong
+/messageOn
+/messageOff
+/afkon
+/afkoff   ----------
+/skipsong ----------
+/autodj
+/removedj
+/lame
+/snag
+/removesong
+/voteskipon #  -------
+/voteskipoff
+/greeton
+/greetoff  -----------
+/getonstage
+/banstage @
+/unbanstage @
+/userid @
+/inform
+/whobanned
+/whostagebanned
+/roomafkon
+/roomafkoff
+/songstats
+/username
+/modpm
+
+duplicate commands:
+/hello
+/escortme -> /escortmyass
+/warnme
+/afk
