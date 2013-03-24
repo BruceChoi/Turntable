@@ -1256,7 +1256,7 @@ bot.on('speak', function (data)
     {
         bot.speak('the mod commands are /ban @, /unban @, /move, /boot, /playminus @, /skipon, /snagevery, /autosnag, /botstatus, /skipoff, /noTheme, /lengthLimit, /stalk @, /setTheme, /stage @, /randomSong, /messageOn, /messageOff, /afkon, /afkoff, /skipsong, /autodj, /removedj, /lame, ' +
             '/snag, /removesong, /playLimitOn, /playLimitOff, /voteskipon #, /voteskipoff, /greeton, /greetoff, /getonstage, /banstage @, /unbanstage @, /userid @, /inform, /whobanned, ' +
-            '/whostagebanned, /roomafkon, /roomafkoff, /songstats, /username, /modpm');
+            '/whostagebanned, /roomafkon, /roomafkoff, /songstats, /username, /modpm, /whosinmodpm');
         condition = false;
     }
     else if (text.match(/^\/tableflip/))
@@ -1988,7 +1988,7 @@ bot.on('speak', function (data)
             afkPeople.splice(isAlreadyAfk, 1);
         }
     }
-	else if (text.match(/^\/up?/)) //works for djs on stage
+	else if (text == '/up?') //works for djs on stage
     {
         var areTheyADj = currentDjs.indexOf(data.userid); //are they a dj?
         if (areTheyADj != -1) //yes
@@ -3581,7 +3581,7 @@ bot.on('pmmed', function (data)
     {
         bot.pm('the mod commands are /ban @, /unban @, /boot, /move, /playminus @, /snagevery, /autosnag, /skipon, /playLimitOn, /playLimitOff, /skipoff, /stalk @, /lengthLimit, /setTheme, /noTheme, /stage @, /randomSong, /messageOn, /messageOff, /afkon, /afkoff, /skipsong, /autodj, /removedj, /lame, ' +
             '/snag, /botstatus, /removesong, /voteskipon #, /voteskipoff, /greeton, /greetoff, /getonstage, /banstage @, /unbanstage @, /userid @, /inform, ' +
-            '/whobanned, /whostagebanned, /roomafkon, /roomafkoff, /songstats, /username, /modpm', data.senderid);
+            '/whobanned, /whostagebanned, /roomafkon, /roomafkoff, /songstats, /username, /modpm, /whosinmodpm', data.senderid);
         condition = false;
     }
     else if (modpm.length != 0) //if no other commands match, send modpm

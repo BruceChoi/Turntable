@@ -1,11 +1,11 @@
-/** Chilly bot
+/** Swim bot
     version 1.0
 	this bot runs on turntable fm, simply switch out the auth, userid, and roomid,
 	and it will work with any account.
 	credits: a big thanks to the people at the turntable api for all the input they gave
 	me on the script. also a thanks to MikeWillis for his awesome song randomize algorithm.
 	and a credit to alaingilbert for his help and the afk timer pattern. thanks to DubbyTT also for 
-	the song skipping algorithm.
+	the song skipping algorithm. Big props to Chilly bot for the base setup!
 */
 
 
@@ -13,9 +13,9 @@
 
 
 var Bot = require('ttapi');
-var AUTH = 'auth+live+71664fb01dddb2c609682f9414590723c3bb2aae'; //set the auth of your bot here.
-var USERID = '4f8cc4a7eb35c102630002f6'; //set the userid of your bot here.
-var ROOMID = '4e726c6467db461e659e5503'; //set the roomid of the room you want the bot to go to here.
+var AUTH = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the auth of your bot here.
+var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx'; //set the userid of your bot here.
+var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx'; //set the roomid of the room you want the bot to go to here.
 var playLimit = 2; //set the playlimit here (default 4 songs)
 var songLengthLimit = 12.0; //set song limit in minutes
 var afkLimit = 15; //set the afk limit in minutes here
