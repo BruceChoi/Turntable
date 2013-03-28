@@ -3669,8 +3669,17 @@ bot.on('roomChanged', function (data)
     roomName = data.room.name;
     ttRoomName = data.room.shortcut;
 
+    //procedure for getting song tags
+    song = data.room.metadata.current_song.metadata.song;
+    album = data.room.metadata.current_song.metadata.album;
+    genre = data.room.metadata.current_song.metadata.genre;
+    artist = data.room.metadata.current_song.metadata.artist;
+    getSong = data.room.metadata.current_song._id;
 
-
+    //this is for keeping track of the upvotes and downvotes on the bot
+    upVotes = data.room.metadata.upvotes;
+    downVotes = data.room.metadata.downvotes;
+    
     //finds out who the currently playing dj's are.    
     for (var iop = 0; iop < data.room.metadata.djs.length; iop++)
     {
@@ -3986,7 +3995,7 @@ bot.on('endsong', function (data)
     //bot says song stats for each song
     if (SONGSTATS === true)
     {
-        bot.speak('stats for ' + song + ' by ' + artist + ': ' + ':thumbsdown:' + downVotes + ':thumbsup:' + upVotes + ':heart:' + whoSnagged);
+        bot.speak(song + ' by ' + artist + ': ' + ':thumbsup:' + upVotes + ':thumbsdown:' + downVotes + ':heart:' + whoSnagged);
     }
 
 

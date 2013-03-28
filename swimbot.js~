@@ -61,19 +61,19 @@ global.vipList = [];
 // true = on, false = off
 var HowManyVotesToSkip = 2; //how many votes for a song to get skipped(default value, only works if voteSkip = true)
 var getonstage = true; //autodjing(on by default)
-var queue = true; //queue(on by default)
-var AFK = true; //afk limit(on by default), this is for the dj's on stage
+var queue = false; //queue(off by default)
+var AFK = false; //afk limit(off by default), this is for the dj's on stage
 var MESSAGE = true; //room message(on by default), the bot says your room info in intervals of whatever the howOftenToRepeatMessage variable above is set to in minutes
 var defaultMessage = true;
 /*This corresponds to the MESSAGE variable directly above, if true it will give you the default repeat message along with your room info, if false it will only say your room info.
 							  (only works when MESSAGE = true) (this feature is on by default)
 							*/
-var GREET = true; //room greeting when someone joins the room(on by default)
+var GREET = false; //room greeting when someone joins the room(off by default)
 var voteSkip = false; //voteskipping(off by default)
 var roomAFK = false; //audience afk limit(off by default)
 var SONGSTATS = true; //song stats after each song(on by default)
 var kickTTSTAT = false; //kicks the ttstats bot when it tries to join the room(off by default)
-var LIMIT = true; //song length limit (on by default)
+var LIMIT = false; //song length limit (off by default)
 var PLAYLIMIT = false; //song play limit, this is for the playLimit variable up above(off by default)
 var autoSnag = false; //auto song adding(different from every song adding), tied to howManyVotes up above, (off by default)
 var autoBop = false; //choose whether the bot will autobop for each song or not(against the rules but i leave it up to you) (off by default)
@@ -100,7 +100,7 @@ var index = null;
 var song = null;
 var album = null;
 var genre = null;
-var skipOn = null;
+var skipOn = true; //on by default
 var snagSong = false;
 var checkWhoIsDj;
 var randomOnce = 0;
@@ -3669,7 +3669,12 @@ bot.on('roomChanged', function (data)
     roomName = data.room.name;
     ttRoomName = data.room.shortcut;
 
-
+    //procedure for getting song tags
+    song = data.room.metadata.current_song.metadata.song;
+    album = data.room.metadata.current_song.metadata.album;
+    genre = data.room.metadata.current_song.metadata.genre;
+    artist = data.room.metadata.current_song.metadata.artist;
+    getSong = data.room.metadata.current_song._id;
 
     //finds out who the currently playing dj's are.    
     for (var iop = 0; iop < data.room.metadata.djs.length; iop++)
@@ -3986,7 +3991,7 @@ bot.on('endsong', function (data)
     //bot says song stats for each song
     if (SONGSTATS === true)
     {
-        bot.speak('stats for ' + song + ' by ' + artist + ': ' + ':thumbsdown:' + downVotes + ':thumbsup:' + upVotes + ':heart:' + whoSnagged);
+        bot.speak(song + ' by ' + artist + ': ' + ':thumbsup:' + upVotes + ':thumbsdown:' + downVotes + ':heart:' + whoSnagged);
     }
 
 
