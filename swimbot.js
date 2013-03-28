@@ -13,9 +13,9 @@
 
 
 var Bot = require('ttapi');
-var AUTH = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the auth of your bot here.
-var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx'; //set the userid of your bot here.
-var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx'; //set the roomid of the room you want the bot to go to here.
+var AUTH = 'xxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the auth of your bot here.
+var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the userid of your bot here.
+var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the roomid of the room you want the bot to go to here.
 var playLimit = 2; //set the playlimit here (default 4 songs)
 var songLengthLimit = 12.0; //set song limit in minutes
 var afkLimit = 15; //set the afk limit in minutes here
@@ -84,6 +84,19 @@ var repeatMessageThroughPm = false;
 									  (false = through the chatbox, true = through the pm) (MESSAGE must equal true for this to work) (this feature is off by default)										
 									*/
 
+//this is for the event messages
+var eventMessageRepeatTime = 15; //how long in minutes between event messages(must have EVENTMESSAGE = true to see any messages)
+var eventMessageThroughPm = false; //determines whether event message will be pmmed or said in chat, false = chatbox, true = pm box
+var EVENTMESSAGE = false; //this disables / enables event message on startup - true = enabled, false = disabled									
+
+global.eventMessages = ['hello there', //enter your different event messages here, they will be cycles through so that one message appears at a time at each interval
+
+    'welcome to chill or be chilled' +
+        ' this is an example message, multiple lines should be separate strings added together',
+
+    'this is a test'
+];
+
 
 /************************************EndSetUp**********************************************************************/
 
@@ -100,7 +113,7 @@ var index = null;
 var song = null;
 var album = null;
 var genre = null;
-var skipOn = true; //on by default
+var skipOn = true; //(on by default)
 var snagSong = false;
 var checkWhoIsDj;
 var randomOnce = 0;
@@ -119,6 +132,7 @@ var roomName = null;
 var ttRoomName = null;
 var THEME = false;
 var whatIsTheme = null;
+var messageCounter = 0; //this is for the array of messages
 
 global.modpm = []; //for modpm
 global.warnme = [];
@@ -410,17 +424,35 @@ vipListCheck = function ()
 
 setInterval(vipListCheck, 5000) //repeats the check every five seconds. 
 
-/*
-repeatAfkMessage = function () 
-	{
-		if(AFK == true)
-			{
-				bot.speak('The afk limit is currently active, please chat or awesome to reset your timer.'); //this is your afk message.
-			};
-	};
 
-setInterval(repeatAfkMessage, 600 * 1000) //repeats every 10 minutes if afk is set to on.
-*/
+//this is for the event messages array
+global.eventMessagesIterator = function ()
+{
+    if (EVENTMESSAGE == true && eventMessages.length !== 0)
+    {
+        if (messageCounter == eventMessages.length)
+        {
+            messageCounter = 0; //if end of event messages array reached, reset counter
+        }
+
+        if (eventMessageThroughPm == false) //if set to send messages through chatbox, do so
+        {
+            bot.speak(eventMessages[messageCounter] + "");
+        }
+        else //else send message through pm
+        {
+            for (var jio = 0; jio < userIds.length; jio++)
+            {
+                bot.pm(eventMessages[messageCounter] + "", userIds[jio]);
+            }
+        }
+
+        ++messageCounter; //increment message counter
+    }
+}
+
+setInterval(eventMessagesIterator, eventMessageRepeatTime * 60 * 1000) //repeats check
+
 
 
 repeatMessage = function ()
@@ -928,6 +960,14 @@ bot.on('speak', function (data)
         {
             whatsOn += 'autodjing: Off, ';
         }
+        if (EVENTMESSAGE === true)
+        {
+            whatsOn += 'event message: On, ';
+        }
+        else
+        {
+            whatsOn += 'event message: Off, ';
+        }
         if (MESSAGE === true)
         {
             whatsOn += 'room message: On, ';
@@ -1243,6 +1283,16 @@ bot.on('speak', function (data)
         bot.speak('room greeting: Off');
         GREET = false;
     }
+    else if (text.match(/^\/eventmessageOn/) && condition === true)
+    {
+        bot.speak('event message: On');
+        EVENTMESSAGE = true;
+    }
+    else if (text.match(/^\/eventmessageOff/) && condition === true)
+    {
+        bot.speak('event message: Off');
+        EVENTMESSAGE = false;
+    }
     else if (text.match(/^\/messageOn/) && condition === true)
     {
         bot.speak('message: On');
@@ -1263,7 +1313,7 @@ bot.on('speak', function (data)
     }
     else if (text.match(/^\/admincommands/) && condition === true)
     {
-        bot.speak('the mod commands are /ban @, /unban @, /move, /boot, /playminus @, /skipon, /snagevery, /autosnag, /botstatus, /skipoff, /noTheme, /lengthLimit, /stalk @, /setTheme, /stage @, /randomSong, /messageOn, /messageOff, /afkon, /afkoff, /skipsong, /autodj, /removedj, /lame, ' +
+        bot.speak('the mod commands are /ban @, /unban @, /move, /eventmessageOn, /eventmessageOff, /boot, /playminus @, /skipon, /snagevery, /autosnag, /botstatus, /skipoff, /noTheme, /lengthLimit, /stalk @, /setTheme, /stage @, /randomSong, /messageOn, /messageOff, /afkon, /afkoff, /skipsong, /autodj, /removedj, /lame, ' +
             '/snag, /removesong, /playLimitOn, /playLimitOff, /voteskipon #, /voteskipoff, /greeton, /greetoff, /getonstage, /banstage @, /unbanstage @, /userid @, /inform, /whobanned, ' +
             '/whostagebanned, /roomafkon, /roomafkoff, /songstats, /username, /modpm, /whosinmodpm');
         condition = false;
@@ -2877,6 +2927,16 @@ bot.on('pmmed', function (data)
         bot.pm('message: Off', data.senderid);
         MESSAGE = false;
     }
+    else if (text.match(/^\/eventmessageOn/) && condition === true && isInRoom === true)
+    {
+        bot.pm('event message: On', data.senderid);
+        EVENTMESSAGE = true;
+    }
+    else if (text.match(/^\/eventmessageOff/) && condition === true && isInRoom === true)
+    {
+        bot.pm('event message: Off', data.senderid);
+        EVENTMESSAGE = false;
+    }
     else if (text.match(/^\/messageOn/) && condition === true && isInRoom === true)
     {
         bot.pm('message: On', data.senderid);
@@ -3227,6 +3287,14 @@ bot.on('pmmed', function (data)
         else
         {
             whatsOn += 'autodjing: Off, ';
+        }
+        if (EVENTMESSAGE === true)
+        {
+            whatsOn += 'event message: On, ';
+        }
+        else
+        {
+            whatsOn += 'event message: Off, ';
         }
         if (MESSAGE === true)
         {
@@ -3619,7 +3687,7 @@ bot.on('pmmed', function (data)
     }
     else if (text.match(/^\/pmcommands/) && condition === true && isInRoom === true) //the moderators see this
     {
-        bot.pm('/chilly, /moon, /modpm, /notifyme, /playlist, /move, /boot, /rules, /djafk, /playminus @, /snagevery, /autosnag, /position, /theme, /mytime, /uptime, /m, /stage @, /botstatus, /djplays, /banstage @, /unbanstage @, ' +
+        bot.pm('/chilly, /moon, /modpm, /notifyme, /playlist, /move, /eventmessageOn, /eventmessageOff, /boot, /rules, /djafk, /playminus @, /snagevery, /autosnag, /position, /theme, /mytime, /uptime, /m, /stage @, /botstatus, /djplays, /banstage @, /unbanstage @, ' +
             '/userid @, /ban @, /unban @, /stalk @, /whobanned, /whostagebanned, /stopescortme, /escortmyass, /snag, /inform, ' +
             '/removesong, /username, /away, /whosafk, /commands, /admincommands', data.senderid);
     }
@@ -3629,7 +3697,7 @@ bot.on('pmmed', function (data)
     }
     else if (text.match(/^\/admincommands/) && condition === true && isInRoom === true)
     {
-        bot.pm('the mod commands are /ban @, /unban @, /boot, /move, /playminus @, /snagevery, /autosnag, /skipon, /playLimitOn, /playLimitOff, /skipoff, /stalk @, /lengthLimit, /setTheme, /noTheme, /stage @, /randomSong, /messageOn, /messageOff, /afkon, /afkoff, /skipsong, /autodj, /removedj, /lame, ' +
+        bot.pm('the mod commands are /ban @, /unban @, /eventmessageOn, /eventmessageOff, /boot, /move, /playminus @, /snagevery, /autosnag, /skipon, /playLimitOn, /playLimitOff, /skipoff, /stalk @, /lengthLimit, /setTheme, /noTheme, /stage @, /randomSong, /messageOn, /messageOff, /afkon, /afkoff, /skipsong, /autodj, /removedj, /lame, ' +
             '/snag, /botstatus, /removesong, /voteskipon #, /voteskipoff, /greeton, /greetoff, /getonstage, /banstage @, /unbanstage @, /userid @, /inform, ' +
             '/whobanned, /whostagebanned, /roomafkon, /roomafkoff, /songstats, /username, /modpm, /whosinmodpm', data.senderid);
         condition = false;
@@ -3675,11 +3743,11 @@ bot.on('roomChanged', function (data)
     genre = data.room.metadata.current_song.metadata.genre;
     artist = data.room.metadata.current_song.metadata.artist;
     getSong = data.room.metadata.current_song._id;
-
+    
     //this is for keeping track of the upvotes and downvotes on the bot
     upVotes = data.room.metadata.upvotes;
     downVotes = data.room.metadata.downvotes;
-    
+
     //finds out who the currently playing dj's are.    
     for (var iop = 0; iop < data.room.metadata.djs.length; iop++)
     {
@@ -3995,7 +4063,7 @@ bot.on('endsong', function (data)
     //bot says song stats for each song
     if (SONGSTATS === true)
     {
-        bot.speak(song + ' by ' + artist + ': ' + ':thumbsup:' + upVotes + ':thumbsdown:' + downVotes + ':heart:' + whoSnagged);
+        bot.speak('stats for ' + song + ' by ' + artist + ': ' + ':thumbsdown:' + downVotes + ':thumbsup:' + upVotes + ':heart:' + whoSnagged);
     }
 
 
