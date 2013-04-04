@@ -60,7 +60,7 @@ global.vipList = [];
 //most of them can be changed with commands while the bot is running
 // true = on, false = off
 var HowManyVotesToSkip = 2; //how many votes for a song to get skipped(default value, only works if voteSkip = true)
-var getonstage = true; //autodjing(on by default)
+var getonstage = false; //autodjing(off by default)
 var queue = false; //queue(off by default)
 var AFK = false; //afk limit(off by default), this is for the dj's on stage
 var MESSAGE = true; //room message(on by default), the bot says your room info in intervals of whatever the howOftenToRepeatMessage variable above is set to in minutes
@@ -812,10 +812,12 @@ bot.on('speak', function (data)
             bot.pm('error, playlist reordering is already in progress', data.userid);
         }
     }
+    /* comment out boot for spam
     else if (text.match('turntable.fm/') && !text.match('turntable.fm/' + ttRoomName) && modIndex == -1 && data.userid != USERID)
     {
         bot.boot(data.userid, 'do not advertise other rooms here');
     }
+    */
     else if (text.match('/bumptop') && condition === true)
     {
         if (queue === true)
@@ -2380,13 +2382,13 @@ bot.on('add_dj', function (data)
         }
     }
 
-
+    /* comment out the boot for spam
     //if person exceeds spam count within 10 seconds they are kicked
     if (people[data.user[0].userid].spamCount >= spamLimit)
     {
         bot.boot(data.user[0].userid, 'stop spamming');
     }
-
+    */
 })
 
 
