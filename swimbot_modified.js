@@ -13,7 +13,7 @@
 
 
 var Bot = require('ttapi');
-var AUTH = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the auth of your bot here.
+var AUTH = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the auth of your bot here.
 var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx'; //set the userid of your bot here.
 var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx'; //set the roomid of the room you want the bot to go to here.
 var playLimit = 2; //set the playlimit here (default 4 songs)
@@ -39,7 +39,7 @@ global.masterIds = ['1234', '1234']; //example (clear this before using)
 var whenToGetOnStage = 1; //when this many or less people djing the bot will get on stage(only if autodjing is enabled)
 var whenToGetOffStage = 3; //when this many people are on stage and auto djing is enabled the bot will get off stage(note: the bot counts as one person)
 
-var roomJoinMessage = 'HAPPENING NOW! https://www.facebook.com/events/366478710132303/ HAPPENING THIS MON. https://www.facebook.com/events/152961528198267/'; //the message users will see when they join the room, leave it empty for the default message (only works when greet is turned on)
+var roomJoinMessage = 'HAPPENING TOMORROW! https://www.facebook.com/events/152961528198267/'; //the message users will see when they join the room, leave it empty for the default message (only works when greet is turned on)
 //example of how to use this, var roomJoinMessage = 'your message goes here';
 
 
@@ -3702,19 +3702,17 @@ bot.on('pmmed', function (data)
     else if (modpm.length != 0) //if no other commands match, send modpm
     {
         var areTheyInModPm = modpm.indexOf(data.senderid);
-
         if (areTheyInModPm != -1)
         {
             for (var jhg = 0; jhg < modpm.length; jhg++)
             {
-                if ((modpm[jhg] != data.senderid) || (modpm[jhg] != '4ec6b8d514169c12269511d3')) //this will prevent you from messaging yourself
-                {
-                    bot.pm(theUsersList[name1] + ' said: ' + data.text, modpm[jhg]);
-                }
+            	    if (modpm[jhg] != data.senderid) //this will prevent you from messaging yourself
+            	    {
+            		bot.pm(theUsersList[name1] + ' said: ' + data.text, modpm[jhg]);
+            	    }
             }
         }
     }
-
 
 });
 
@@ -3771,7 +3769,10 @@ bot.on('roomChanged', function (data)
     for (var ihp = 0; ihp < data.room.metadata.moderator_id.length; ihp++)
     {
         modList.push(data.room.metadata.moderator_id[ihp]);
-        modpm.push(data.room.metadata.moderator_id[ihp]);  //add mods to pmList
+        if(data.room.metadata.moderator_id[ihp] != '4ec6b8d514169c12269511d3')  //if not chillbot
+        {
+            modpm.push(data.room.metadata.moderator_id[ihp]);  //add mods to pmList
+        }
     }
 
 
