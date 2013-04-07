@@ -2420,8 +2420,21 @@ bot.on('pmmed', function (data)
 
 
 
-
-    if (text.match(/^\/chilly/) && isInRoom === true)
+    if ((data.text.charAt(0) != '/') && (modpm.length != 0)) //if no other commands match, send modpm
+    {
+        var areTheyInModPm = modpm.indexOf(data.senderid);
+        if (areTheyInModPm != -1)
+        {
+            for (var jhg = 0; jhg < modpm.length; jhg++)
+            {
+            	    if ((modpm[jhg] != data.senderid) && (modpm[jhg] != USERID)) //this will prevent you from messaging yourself
+            	    {
+            		bot.pm(theUsersList[name1] + ' said: ' + data.text, modpm[jhg]);
+            	    }
+            }
+        }
+    }
+    else if (text.match(/^\/chilly/) && isInRoom === true)
     {
         bot.speak('@' + theUsersList[name1] + ' is pleasantly chilled.');
     }
@@ -3699,20 +3712,6 @@ bot.on('pmmed', function (data)
             '/whobanned, /whostagebanned, /roomafkon, /roomafkoff, /songstats, /username, /modpm, /whosinmodpm', data.senderid);
         condition = false;
     }
-    else if (modpm.length != 0) //if no other commands match, send modpm
-    {
-        var areTheyInModPm = modpm.indexOf(data.senderid);
-        if (areTheyInModPm != -1)
-        {
-            for (var jhg = 0; jhg < modpm.length; jhg++)
-            {
-            	    if (modpm[jhg] != data.senderid) //this will prevent you from messaging yourself
-            	    {
-            		bot.pm(theUsersList[name1] + ' said: ' + data.text, modpm[jhg]);
-            	    }
-            }
-        }
-    }
 
 });
 
@@ -3972,6 +3971,7 @@ bot.on('rem_moderator', function (data)
 {
     var test51 = modList.indexOf(data.userid);
     modList.splice(test51, 1);
+    modpm.splice(test51, 1);
 })
 
 
@@ -3985,6 +3985,7 @@ bot.on('new_moderator', function (data)
     if (test50 == -1)
     {
         modList.push(data.userid);
+        modpm.push(data.userid);
     }
 })
 
