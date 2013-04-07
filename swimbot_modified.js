@@ -13,9 +13,9 @@
 
 
 var Bot = require('ttapi');
-var AUTH = 'xxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the auth of your bot here.
-var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the userid of your bot here.
-var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the roomid of the room you want the bot to go to here.
+var AUTH = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; //set the auth of your bot here.
+var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx'; //set the userid of your bot here.
+var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx'; //set the roomid of the room you want the bot to go to here.
 var playLimit = 2; //set the playlimit here (default 4 songs)
 var songLengthLimit = 12.0; //set song limit in minutes
 var afkLimit = 15; //set the afk limit in minutes here
@@ -39,14 +39,14 @@ global.masterIds = ['1234', '1234']; //example (clear this before using)
 var whenToGetOnStage = 1; //when this many or less people djing the bot will get on stage(only if autodjing is enabled)
 var whenToGetOffStage = 3; //when this many people are on stage and auto djing is enabled the bot will get off stage(note: the bot counts as one person)
 
-var roomJoinMessage = ''; //the message users will see when they join the room, leave it empty for the default message (only works when greet is turned on)
+var roomJoinMessage = 'HAPPENING NOW! https://www.facebook.com/events/366478710132303/ HAPPENING THIS MON. https://www.facebook.com/events/152961528198267/'; //the message users will see when they join the room, leave it empty for the default message (only works when greet is turned on)
 //example of how to use this, var roomJoinMessage = 'your message goes here';
 
 
 //note that anything added to the script manually will have to be removed from the script manually
 //all the values currently in these arrays are examples and can be removed.
-global.bannedArtists = ['dj tiesto', 'skrillex', 'lil wayne', 't-pain', 'tpain', 'katy perry', 'eminem', 'porter robinson', //banned artist / song list
-    'gorgoroth', 'justin bieber', 'deadmau5', 'rick roll', 'nosia', 'infected mushroom', 'never gonna give you up', 'rick astley', 'spongebob squarepants'
+global.bannedArtists = [ //banned artist / song list
+
 ];
 global.bannedUsers = ['636473737373', 'bob', '535253533353', 'joe']; //banned users list, put userids in string form here for permanent banning(put their name after their userid to tell who is banned).
 global.bannedFromStage = ['636473737373', 'bob', '535253533353', 'joe']; //put userids in here to ban from djing permanently(put their name after their userid to tell who is banned)
@@ -68,7 +68,7 @@ var defaultMessage = true;
 /*This corresponds to the MESSAGE variable directly above, if true it will give you the default repeat message along with your room info, if false it will only say your room info.
 							  (only works when MESSAGE = true) (this feature is on by default)
 							*/
-var GREET = false; //room greeting when someone joins the room(off by default)
+var GREET = true; //room greeting when someone joins the room(off by default)
 var voteSkip = false; //voteskipping(off by default)
 var roomAFK = false; //audience afk limit(off by default)
 var SONGSTATS = true; //song stats after each song(on by default)
@@ -78,7 +78,7 @@ var PLAYLIMIT = false; //song play limit, this is for the playLimit variable up 
 var autoSnag = false; //auto song adding(different from every song adding), tied to howManyVotes up above, (off by default)
 var autoBop = false; //choose whether the bot will autobop for each song or not(against the rules but i leave it up to you) (off by default)
 var afkThroughPm = false; //choose whether afk warnings(for dj's on stage) will be given through the pm or the chatbox (false = chatbox, true = pm message)
-var greetThroughPm = false; //choose whether greeting message is through the pm or the chatbox(false = chatbox, true = pm), (only works when greeting message is turned on) (off by default)
+var greetThroughPm = true; //choose whether greeting message is through the pm or the chatbox(false = chatbox, true = pm), (only works when greeting message is turned on) (off by default)
 var repeatMessageThroughPm = false;
 /*choose whether the repeating room message(the one corresponding to MESSAGE up above) will be through the chatbox or the pm,
 									  (false = through the chatbox, true = through the pm) (MESSAGE must equal true for this to work) (this feature is off by default)										
@@ -89,7 +89,7 @@ var eventMessageRepeatTime = 15; //how long in minutes between event messages(mu
 var eventMessageThroughPm = false; //determines whether event message will be pmmed or said in chat, false = chatbox, true = pm box
 var EVENTMESSAGE = false; //this disables / enables event message on startup - true = enabled, false = disabled									
 
-global.eventMessages = ['https://www.facebook.com/events/152961528198267/ ULRICH SCHNAUSS, COM TRUISE, BLUETECH & MORE LIVE THIS MONDAY APRIL 8TH!'
+global.eventMessages = [':warning:https://www.facebook.com/events/152961528198267/ ULRICH SCHNAUSS, COM TRUISE, BLUETECH & MORE LIVE THIS MONDAY APRIL 8TH!:warning:' //default event message
 ];
 
 
@@ -3707,7 +3707,7 @@ bot.on('pmmed', function (data)
         {
             for (var jhg = 0; jhg < modpm.length; jhg++)
             {
-                if (modpm[jhg] != data.senderid) //this will prevent you from messaging yourself
+                if ((modpm[jhg] != data.senderid) || (modpm[jhg] != '4ec6b8d514169c12269511d3')) //this will prevent you from messaging yourself
                 {
                     bot.pm(theUsersList[name1] + ' said: ' + data.text, modpm[jhg]);
                 }
@@ -3771,6 +3771,7 @@ bot.on('roomChanged', function (data)
     for (var ihp = 0; ihp < data.room.metadata.moderator_id.length; ihp++)
     {
         modList.push(data.room.metadata.moderator_id[ihp]);
+        modpm.push(data.room.metadata.moderator_id[ihp]);  //add mods to pmList
     }
 
 
@@ -3802,19 +3803,18 @@ bot.on('roomChanged', function (data)
         justSaw3(userIds[z]);
         justSaw4(userIds[z]);
     }
-
-
-
+/*  //Greets all mods upon bot arrival
+    for (var x = 0; x < modList.length; x++)
+    {
+        	bot.pm('I\'m back',modList[x]); 
+    }
+*/
     //starts time in room for everyone currently in the room
     for (var zy = 0; zy < userIds.length; zy++)
     {
         myTime[userIds[zy]] = Date.now();
     }
 });
-
-
-
-
 
 
 //starts up when a new person joins the room
@@ -3826,11 +3826,11 @@ bot.on('registered', function (data)
         bot.pm('The queue is currently active. To add yourself to the queue type /addme. To remove yourself from the queue type /removeme.', data.user[0].userid);
     }
 
-
     //gets newest user and prints greeting, does not greet the bot or the ttstats bot, or banned users
     var roomjoin = data.user[0];
     var areTheyBanned = blackList.indexOf(data.user[0].userid);
     var areTheyBanned2 = bannedUsers.indexOf(data.user[0].userid);
+    
     if (GREET === true && data.user[0].userid != USERID && !data.user[0].name.match('@ttstat'))
     {
         if (areTheyBanned == -1 && areTheyBanned2 == -1)
@@ -3909,8 +3909,6 @@ bot.on('registered', function (data)
     {
         theUsersList.push(data.user[0].userid, data.user[0].name);
     }
-
-
 
     //checks to see if user is on the banlist, if they are they are booted from the room.
     for (var i = 0; i < blackList.length; i++)
@@ -4039,11 +4037,12 @@ bot.on('deregistered', function (data)
     }
 */
 
-    //updates the users list when a user leaves the room.
+    //updates the users list when a user leaves the room, except for mods
     var user = data.user[0].userid;
     var checkLeave = theUsersList.indexOf(data.user[0].userid);
+    var modLeave = modList.indexOf(data.user[0].userid);
     var checkUserIds = userIds.indexOf(data.user[0].userid);
-    if (checkLeave != -1)
+    if ((checkLeave != -1) && (modLeave == -1))
     {
         theUsersList.splice(checkLeave, 2);
         userIds.splice(checkUserIds, 1);

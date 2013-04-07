@@ -63,7 +63,7 @@ var HowManyVotesToSkip = 2; //how many votes for a song to get skipped(default v
 var getonstage = false; //autodjing(off by default)
 var queue = false; //queue(off by default)
 var AFK = false; //afk limit(off by default), this is for the dj's on stage
-var MESSAGE = true; //room message(on by default), the bot says your room info in intervals of whatever the howOftenToRepeatMessage variable above is set to in minutes
+var MESSAGE = false; //room message(on by default), the bot says your room info in intervals of whatever the howOftenToRepeatMessage variable above is set to in minutes
 var defaultMessage = true;
 /*This corresponds to the MESSAGE variable directly above, if true it will give you the default repeat message along with your room info, if false it will only say your room info.
 							  (only works when MESSAGE = true) (this feature is on by default)
@@ -89,12 +89,7 @@ var eventMessageRepeatTime = 15; //how long in minutes between event messages(mu
 var eventMessageThroughPm = false; //determines whether event message will be pmmed or said in chat, false = chatbox, true = pm box
 var EVENTMESSAGE = false; //this disables / enables event message on startup - true = enabled, false = disabled									
 
-global.eventMessages = ['hello there', //enter your different event messages here, they will be cycles through so that one message appears at a time at each interval
-
-    'welcome to chill or be chilled' +
-        ' this is an example message, multiple lines should be separate strings added together',
-
-    'this is a test'
+global.eventMessages = [':warning:https://www.facebook.com/events/152961528198267/ ULRICH SCHNAUSS, COM TRUISE, BLUETECH & MORE LIVE THIS MONDAY APRIL 8TH!:warning:' //default event message
 ];
 
 
@@ -4023,7 +4018,7 @@ bot.on('deregistered', function (data)
             afkPeople.splice(checkUserName, 1);
         }
     }
-
+/*
     //removes people leaving the room in modpm still
     if (modpm.length !== 0)
     {
@@ -4042,7 +4037,7 @@ bot.on('deregistered', function (data)
             }
         }
     }
-
+*/
 
     //updates the users list when a user leaves the room.
     var user = data.user[0].userid;
